@@ -8,4 +8,26 @@ plot(vector, type="o", col="blue")
 title(main="practice", col.main="blue", font.main=4)
 
 # open file
-system('open Rplots.pdf')
+# system('open Rplots.pdf')
+
+csvdata <- read.table("chol.csv", header = TRUE, sep = ",", 
+                      colClasses = c("NULL", "numeric", "numeric"))
+names(csvdata)[names(csvdata) == "A"] <- "Before"
+names(csvdata)[names(csvdata) == "B"] <- "After"
+
+library(ggplot2)
+library(dplyr)
+library(hrbrthemes)
+hrbrthemes::import_roboto_condensed()
+
+p <- csvdata %>%
+    ggplot( aes(x=value, fill=type)) +
+        geom_histogram( color="#e9ecef", alpha=0.6, position='identity') +
+        scale_fill_manual(values=c("#69b3a2", "#404080")) +
+        theme_ipsum() +
+        labs(fill="")
+p
+
+library(htmlwidgets)
+# saveWidget(p, file=paste0( getwd(), "/HtmlWidget/3dSurface.html"))
+saveWidget(p, file="histogram.html")
